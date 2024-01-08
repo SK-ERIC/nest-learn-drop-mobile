@@ -1,36 +1,23 @@
-import { useState } from 'react';
-
 import { useMutation, useQuery } from '@apollo/client';
+import { Button, Form, Input } from 'antd-mobile';
 
 import { FIND, UPDATE } from './graphql/demo';
 
 function App() {
-  const [name, setName] = useState('');
-  const [desc, setDesc] = useState('');
-
-  const { loading, data } = useQuery(FIND, {
+  const { data } = useQuery(FIND, {
     variables: {
       id: '19e31439-c069-4e38-9f5c-bec57d0084d7',
     },
   });
 
-  const [update] = useMutation(UPDATE);
+  const [update, { loading }] = useMutation(UPDATE);
 
-  const onChangeNameHandler = (v: React.ChangeEvent<HTMLInputElement>) => {
-    setName(v.target.value);
-  };
-
-  const onChangeDescHandler = (v: React.ChangeEvent<HTMLInputElement>) => {
-    setDesc(v.target.value);
-  };
-
-  const onClickHandler = () => {
+  const onClickHandler = (v: any) => {
     update({
       variables: {
         id: '19e31439-c069-4e38-9f5c-bec57d0084d7',
         params: {
-          name,
-          desc,
+          ...v,
           avatar: 'https://avatars.githubusercontent.com/u/52649359',
         },
       },
@@ -43,23 +30,22 @@ function App() {
         data:
         {JSON.stringify(data)}
       </p>
-      <p>
-        loading:
-        {JSON.stringify(loading)}
-      </p>
-      <p>
-        name:
-        <input type="text" onChange={onChangeNameHandler} />
-      </p>
-      <p>
-        desc:
-        <input type="text" onChange={onChangeDescHandler} />
-      </p>
-      <p>
-        <button type="button" onClick={onClickHandler}>
-          更新
-        </button>
-      </p>
+      <Form
+        layout="horizontal"
+        onFinish={onClickHandler}
+        footer={
+          <Button block type="submit" color="primary" size="large" loading={loading}>
+            提交
+          </Button>
+        }
+      >
+        <Form.Item label="姓名" name="name">
+          <Input />
+        </Form.Item>
+        <Form.Item label="描述" name="desc">
+          <Input />
+        </Form.Item>
+      </Form>
     </div>
   );
 }
