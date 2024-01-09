@@ -1,6 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { Button, Form, ImageUploader, Input } from 'antd-mobile';
 
+import styles from './App.module.less';
 import { UPDATE } from './graphql/demo';
 import { useUpLoadOSS } from './hooks/useUploadOSS';
 
@@ -21,7 +22,7 @@ function App() {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <Form
         layout="horizontal"
         onFinish={onClickHandler}
