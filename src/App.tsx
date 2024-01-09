@@ -1,14 +1,11 @@
-import { useMutation, useQuery } from '@apollo/client';
-import { Button, Form, Input } from 'antd-mobile';
+import { useMutation } from '@apollo/client';
+import { Button, Form, ImageUploader, Input } from 'antd-mobile';
 
-import { FIND, UPDATE } from './graphql/demo';
+import { UPDATE } from './graphql/demo';
+import { useUpLoadOSS } from './hooks/useUploadOSS';
 
 function App() {
-  const { data } = useQuery(FIND, {
-    variables: {
-      id: '19e31439-c069-4e38-9f5c-bec57d0084d7',
-    },
-  });
+  const uploadHandler = useUpLoadOSS();
 
   const [update, { loading }] = useMutation(UPDATE);
 
@@ -18,7 +15,6 @@ function App() {
         id: '19e31439-c069-4e38-9f5c-bec57d0084d7',
         params: {
           ...v,
-          avatar: 'https://avatars.githubusercontent.com/u/52649359',
         },
       },
     });
@@ -26,10 +22,6 @@ function App() {
 
   return (
     <div>
-      <p>
-        data:
-        {JSON.stringify(data)}
-      </p>
       <Form
         layout="horizontal"
         onFinish={onClickHandler}
@@ -44,6 +36,9 @@ function App() {
         </Form.Item>
         <Form.Item label="描述" name="desc">
           <Input />
+        </Form.Item>
+        <Form.Item label="头像" name="avatar">
+          <ImageUploader upload={uploadHandler} />
         </Form.Item>
       </Form>
     </div>
